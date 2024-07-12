@@ -1,5 +1,7 @@
 const express = require('express');
 const middleware = require('./middleware/auth');
+const productRoutes = require('./routes/productRoutes');
+const adminRoutes = require('./routes/adminRoutes');
 
 const app = express();
 
@@ -7,6 +9,11 @@ const app = express();
 
 
 const PORT = process.env.PORT || 3000;
+
+// Routes
+app.use('/products', productRoutes);
+app.use('/admins', adminRoutes);
+
 
 app.get('/', (req, res) => {
   res.send('Hello World');
