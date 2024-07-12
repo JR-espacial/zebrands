@@ -1,0 +1,65 @@
+
+const { PrismaClient } = require('@prisma/client');
+
+
+const prisma = new PrismaClient();
+
+
+class Product {
+  constructor(id, name, description, price) {
+    this.id = id;
+    this.name = name;
+    this.description = description;
+    this.price = price;
+  }
+
+  static async getAllProducts() {
+    // Retrieve all products from the database using Prisma
+    return await prisma.product.findMany();
+  }
+
+  static async getProductById(productId) {
+    // Retrieve a specific product by its ID from the database using Prisma
+    return await prisma.product.findUnique({
+      where: {
+        id: productId
+      }
+    });
+  }
+
+  static async createProduct(name, description, price) {
+    // Create a new product in the database using Prisma
+    return await prisma.product.create({
+      data: {
+        name,
+        description,
+        price
+      }
+    });
+  }
+
+  static async updateProduct(productId, name, description, price) {
+    // Update an existing product in the database using Prisma
+    return await prisma.product.update({
+      where: {
+        id: productId
+      },
+      data: {
+        name,
+        description,
+        price
+      }
+    });
+  }
+
+  static async deleteProduct(productId) {
+    // Delete a product from the database using Prisma
+    return await prisma.product.delete({
+      where: {
+        id: productId
+      }
+    });
+  }
+}
+
+module.exports = Product;
