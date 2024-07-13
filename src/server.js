@@ -2,8 +2,18 @@ const express = require('express');
 const middleware = require('./middleware/auth');
 const productRoutes = require('./routes/productRoutes');
 const adminRoutes = require('./routes/adminRoutes');
+const logRoutes = require('./routes/queryLogRoutes');
+const cors = require('cors');
+app.use(express.json());
+
+app.use(cors());
+
+const bodyParser = require('body-parser');
 
 const app = express();
+app.use(express.json());
+
+app.use(cors());
 
 
 
