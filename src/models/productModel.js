@@ -27,13 +27,16 @@ class Product {
     });
   }
 
-  static async createProduct(name, description, price) {
+  static async createProduct(name, description, price, sku, brand, adminId) {
     // Create a new product in the database using Prisma
     return await prisma.product.create({
       data: {
         name,
         description,
-        price
+        price,
+        sku,
+        brand,
+        adminId
       }
     });
   }
