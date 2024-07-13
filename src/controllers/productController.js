@@ -1,4 +1,5 @@
 const productModel = require('../models/productModel');
+const mailerService = require('../services/mailService');
 
 // Fetch all products
 async function getAllProducts(req, res) {
@@ -31,11 +32,45 @@ async function getAllProducts(req, res) {
   }
 }
 
+// Fetch a single product
+async function getProduct(req, res) {
+  const productId = parseInt(req.params.id);
+
+  if (!productId) {
+    return res.status(400).json({
+      status: 'error',
+      data: null,
+      message: 'Invalid product ID.'
+    });
+  }
+
+  try {
+    const product = await productModel.getProductById(productId);
+    if (!product) {
+      return res.status(404).json({
+        status: 'error',
+        data: null,
+        message: 'Product not found.'
+      });
+    }
+
+    res.status(200).json({
+      status: 'success',
+      data: product,
+      message: 'Product retrieved successfully.'
+    });
+  } catch (error) {
+    res.status(400).json({
+      status: 'error',
+      data: null,
+      message: 'Error retrieving product: ' + error.message
+    });
+  }
+}
+
 //Create a new product
 async function createProduct(req, res) {
   try {
-    // Log the request body for debugging purposes
-    console.log(req.body);
 
     // Destructure the required fields from the request body
     const { name, description, price, sku, brand, adminId } = req.body;
@@ -79,8 +114,6 @@ async function createProduct(req, res) {
 
 async function updateProduct(req, res) {
   const productId = parseInt(req.params.id);
-
-  console.log(req.params);
   
   if (!productId) {
     return res.status(400).json({
@@ -94,6 +127,7 @@ async function updateProduct(req, res) {
 
   try {
     const updatedProduct = await productModel.updateProduct(productId, name, description, price);
+
     if (!updatedProduct) {
       return res.status(404).json({
         status: 'error',
@@ -101,6 +135,23 @@ async function updateProduct(req, res) {
         message: 'Product not found.'
       });
     }
+
+    const mailSent = await mailerService.sendMessage({
+      to: 'j__r__g@hotmail.com',
+      subject: 'Product Updated',
+      text: `Product ${updatedProduct.name} has been updated.`,
+      html: `<strong>Product ${updatedProduct.name} has been updated.</strong>`
+    });
+
+    if(!mailSent) {
+      return res.status(500).json({
+        status: 'error',
+        data: null,
+        message: 'Error sending email.'
+      });
+    }
+
+
     res.status(200).json({
       status: 'success',
       data: updatedProduct,
@@ -115,10 +166,46 @@ async function updateProduct(req, res) {
   }
 }
 
+//Delete a product
+async function deleteProduct(req, res) {
+  const productId = parseInt(req.params.id);
+
+  if (!productId) {
+    return res.status(400).json({
+      status: 'error',
+      data: null,
+      message: 'Invalid product ID.'
+    });
+  }
+
+  try {
+    const deletedProduct = await productModel.deleteProduct(productId);
+    if (!deletedProduct) {
+      return res.status(404).json({
+        status: 'error',
+        data: null,
+        message: 'Product not found.'
+      });
+    }
+    res.status(200).json({
+      status: 'success',
+      data: deletedProduct,
+      message: 'Product deleted successfully.'
+    });
+  } catch (error) {
+    res.status(400).json({
+      status: 'error',
+      data: null,
+      message: 'Error deleting product: ' + error.message
+    });
+  }
+}
 
 
 module.exports = {
   getAllProducts,
+  getProduct,
   createProduct,
   updateProduct,
+  deleteProduct
 };

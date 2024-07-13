@@ -57,9 +57,6 @@ class Product {
         }
       });
 
-      // Create a query log for the updated product
-      await queryLogModel.createQueryLog(productId);
-
       return updatedProduct;
       
     } catch (error) {

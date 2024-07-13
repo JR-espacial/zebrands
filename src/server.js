@@ -1,13 +1,11 @@
 const express = require('express');
-const middleware = require('./middleware/auth');
+const authMiddleware = require('./middleware/authMiddleware');
 const productRoutes = require('./routes/productRoutes');
 const adminRoutes = require('./routes/adminRoutes');
 const logRoutes = require('./routes/queryLogRoutes');
 const cors = require('cors');
 
-const mailService = require('./services/mailService');
 
-const bodyParser = require('body-parser');
 
 const app = express();
 app.use(express.json());
@@ -30,10 +28,16 @@ app.get('/', (req, res) => {
 
 });
 
-// app.get('/protected', middleware.auth, (req, res) => {
-//   res.send('This is a protected route');
-// });
+app.get('/protected', authMiddleware, (req, res) => {
+  // Access authenticated user info
+  console.log('Authenticated User:', req.auth);
+  console.log('Authenticated User:', req.auth.payload);
 
+  // Return protected resource
+  res.json({
+    message: 'Hello from a protected endpoint! You need to be authenticated to see this.'
+  });
+});
 
 
 app.listen(3000, () => {

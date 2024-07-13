@@ -5,10 +5,16 @@ const productController = require('../controllers/productController');
 // Route to fetch all products
 router.get('/', productController.getAllProducts);
 
+// Route to fetch a single product
+router.get('/:id', productController.getProduct);
+
 // Route to create a new product
 router.post('/', productController.createProduct);
 
 // Route to update an existing product
-router.post('/update/:id', productController.updateProduct);
+router.put('/:id', productController.updateProduct);
+
+// Route to delete a product
+router.delete('/:id', productController.deleteProduct);
 
 module.exports = router;
