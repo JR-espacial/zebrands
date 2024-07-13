@@ -1,6 +1,6 @@
-// prisma/seed.js
-
 import { PrismaClient } from '@prisma/client';
+
+
 
 const prisma = new PrismaClient();
 
@@ -28,6 +28,7 @@ async function main() {
       {
         sku: 'P001',
         name: 'Product One',
+        description: 'Description for Product One', // Add description
         price: 10.99,
         brand: 'Brand A',
         adminId: admin1.id,
@@ -35,6 +36,7 @@ async function main() {
       {
         sku: 'P002',
         name: 'Product Two',
+        description: 'Description for Product Two', // Add description
         price: 20.99,
         brand: 'Brand B',
         adminId: admin2.id,
@@ -42,6 +44,7 @@ async function main() {
       {
         sku: 'P003',
         name: 'Product Three',
+        description: 'Description for Product Three', // Add description
         price: 30.99,
         brand: 'Brand C',
         adminId: admin1.id,
