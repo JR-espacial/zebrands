@@ -77,8 +77,48 @@ async function createProduct(req, res) {
   }
 } 
 
+async function updateProduct(req, res) {
+  const productId = parseInt(req.params.id);
+
+  console.log(req.params);
+  
+  if (!productId) {
+    return res.status(400).json({
+      status: 'error',
+      data: null,
+      message: 'Invalid product ID.'
+    });
+  }
+
+  const { name, description, price } = req.body;
+
+  try {
+    const updatedProduct = await productModel.updateProduct(productId, name, description, price);
+    if (!updatedProduct) {
+      return res.status(404).json({
+        status: 'error',
+        data: null,
+        message: 'Product not found.'
+      });
+    }
+    res.status(200).json({
+      status: 'success',
+      data: updatedProduct,
+      message: 'Product updated successfully.'
+    });
+  } catch (error) {
+    res.status(400).json({
+      status: 'error',
+      data: null,
+      message: 'Error updating product: ' + error.message
+    });
+  }
+}
+
+
 
 module.exports = {
   getAllProducts,
   createProduct,
+  updateProduct,
 };

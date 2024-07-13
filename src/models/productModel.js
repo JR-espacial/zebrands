@@ -4,6 +4,8 @@ const { PrismaClient } = require('@prisma/client');
 
 const prisma = new PrismaClient();
 
+const queryLogModel = require('./queryLogModel');
+
 
 class Product {
   constructor(id, name, description, price) {
@@ -43,16 +45,26 @@ class Product {
 
   static async updateProduct(productId, name, description, price) {
     // Update an existing product in the database using Prisma
-    return await prisma.product.update({
-      where: {
-        id: productId
-      },
-      data: {
-        name,
-        description,
-        price
-      }
-    });
+    try {
+      const updatedProduct = await prisma.product.update({
+        where: {
+          id: productId
+        },
+        data: {
+          name,
+          description,
+          price
+        }
+      });
+
+      // Create a query log for the updated product
+      await queryLogModel.createQueryLog(productId);
+
+      return updatedProduct;
+      
+    } catch (error) {
+        throw new Error(`Error updating product: ${error.message}`);
+    }
   }
 
   static async deleteProduct(productId) {
