@@ -5,6 +5,8 @@ const adminRoutes = require('./routes/adminRoutes');
 const logRoutes = require('./routes/queryLogRoutes');
 const cors = require('cors');
 
+const mailService = require('./services/mailService');
+
 const bodyParser = require('body-parser');
 
 const app = express();
@@ -24,7 +26,8 @@ app.use('/queryLogs', logRoutes);
 
 
 app.get('/', (req, res) => {
-  res.send('Hello World');
+  res.send('Welcome to the API');
+
 });
 
 // app.get('/protected', middleware.auth, (req, res) => {
