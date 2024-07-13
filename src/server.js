@@ -4,9 +4,6 @@ const productRoutes = require('./routes/productRoutes');
 const adminRoutes = require('./routes/adminRoutes');
 const logRoutes = require('./routes/queryLogRoutes');
 const cors = require('cors');
-app.use(express.json());
-
-app.use(cors());
 
 const bodyParser = require('body-parser');
 
@@ -23,6 +20,7 @@ const PORT = process.env.PORT || 3000;
 // Routes
 app.use('/products', productRoutes);
 app.use('/admins', adminRoutes);
+app.use('/queryLogs', logRoutes);
 
 
 app.get('/', (req, res) => {
