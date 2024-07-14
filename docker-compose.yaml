@@ -1,4 +1,17 @@
 services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "${NODE_PORT}:${NODE_PORT}"
+    environment:
+      NODE_ENV: production
+      DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:${POSTGRES_PORT}/${POSTGRES_DB}
+      # Other environment variables from .env or directly set here
+    depends_on:
+      - postgres
+
   postgres:
     image: postgres:latest
     container_name: postgres
