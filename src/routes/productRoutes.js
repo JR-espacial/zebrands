@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const productController = require('../controllers/productController');
-const { requiresAuth } = require('express-openid-connect');
+const authMiddleware = require('../middleware/authMiddleware');
 
 // Route to fetch all products
 router.get('/', productController.getAllProducts);
@@ -10,12 +10,12 @@ router.get('/', productController.getAllProducts);
 router.get('/:id', productController.getProduct);
 
 // Route to create a new product
-router.post('/',requiresAuth(), productController.createProduct);
+router.post('/',authMiddleware, productController.createProduct);
 
 // Route to update an existing product
-router.put('/:id',requiresAuth(), productController.updateProduct);
+router.put('/:id',authMiddleware, productController.updateProduct);
 
 // Route to delete a product
-router.delete('/:id',requiresAuth(), productController.deleteProduct);
+router.delete('/:id',authMiddleware, productController.deleteProduct);
 
 module.exports = router;
