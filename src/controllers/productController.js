@@ -137,7 +137,7 @@ async function updateProduct(req, res) {
     }
 
     const mailSent = await mailerService.sendMessage({
-      to: 'j__r__g@hotmail.com',
+      to: req.oidc.user.email ,
       subject: 'Product Updated',
       text: `Product ${updatedProduct.name} has been updated.`,
       html: `<strong>Product ${updatedProduct.name} has been updated.</strong>`
