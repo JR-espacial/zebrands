@@ -1,5 +1,6 @@
 const productModel = require('../models/productModel');
 const mailerService = require('../services/mailService');
+const queryLogModel = require('../models/queryLogModel');
 
 // Fetch all products
 async function getAllProducts(req, res) {
@@ -52,6 +53,22 @@ async function getProduct(req, res) {
         data: null,
         message: 'Product not found.'
       });
+    }
+
+    const  isAuthenticated = req.oidc.isAuthenticated()
+
+    console.log('isAuthenticated', isAuthenticated)
+
+    if(!isAuthenticated) {
+      const results = await queryLogModel.createQueryLog(productId);
+
+      if (results.error) {
+        return res.status(400).send({
+          status: 'error',
+          data: null,
+          message: 'Error: ' + results.error
+        });
+      }
     }
 
     res.status(200).json({
