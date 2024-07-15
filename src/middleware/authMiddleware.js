@@ -1,17 +1,26 @@
 
+const dotenv = require("dotenv");
 
-// Middleware function to check authentication status
-function authMiddleware(req, res, next) {
-    // Check if the user is authenticated
-    if (!req.oidc.isAuthenticated()) {
-        return res.status(401).json({
-            status: 'error',
-            data: null,
-            message: 'Unauthorized request go to /login'
-        });
-    }
-    // If authenticated, proceed to the next middleware or route handler
-    next();
-}
+dotenv.config();
+
+const jwt = require('express-jwt');
+const jwksRsa = require('jwks-rsa');
+require('dotenv').config();
+
+const jwksUri = `https://${process.env.AUTH0_DOMAIN}/.well-known/jwks.json`;
+
+console.log(jwksUri);
+
+const authMiddleware = jwt({
+  secret: jwksRsa.expressJwtSecret({
+    cache: true,
+    rateLimit: true,
+    jwksRequestsPerMinute: 5,
+    jwksUri: jwksUri
+  }),
+  audience: `${process.env.APP_AUDIENCE}`,
+  issuer: `https://${process.env.AUTH0_DOMAIN}/`,
+  algorithms: ['RS256']
+});
 
 module.exports = authMiddleware;

@@ -90,19 +90,19 @@ async function createProduct(req, res) {
   try {
 
     // Destructure the required fields from the request body
-    const { name, description, price, sku, brand, adminId } = req.body;
+    const { name, description, price, sku, brand } = req.body;
 
     // Validate the request body to ensure all fields are present
-    if (!name || !description || !price || !sku || !brand || !adminId) {
+    if (!name || !description || !price || !sku || !brand) {
       return res.status(400).send({
         status: 'error',
         data: null,
-        message: 'Missing required fields: name, description, price, sku, brand, or adminId.'
+        message: 'Missing required fields: name, description, price, sku, brand'
       });
     }
 
     // Call the model function to create the product
-    const results = await productModel.createProduct(name, description, price, sku, brand, adminId);
+    const results = await productModel.createProduct(name, description, price, sku, brand);
 
     // Check for any errors returned by the model function
     if (results.error) {
