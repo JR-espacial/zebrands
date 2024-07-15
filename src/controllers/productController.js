@@ -142,6 +142,14 @@ async function updateProduct(req, res) {
 
   const { name, description, price } = req.body;
 
+  if (!name && !description && !price) {
+    return res.status(400).json({
+      status: 'error',
+      data: null,
+      message: 'Missing required fields: name, description, price'
+    });
+  }
+
   try {
     const updatedProduct = await productModel.updateProduct(productId, name, description, price);
 
@@ -153,18 +161,17 @@ async function updateProduct(req, res) {
       });
     }
 
-    const mailSent = await mailerService.sendMessage({
-      to: req.oidc.user.email ,
+    const mailSent = await mailerService.notifyAllAdmins({
       subject: 'Product Updated',
       text: `Product ${updatedProduct.name} has been updated.`,
-      html: `<strong>Product ${updatedProduct.name} has been updated.</strong>`
+      html: `<p>Product ${updatedProduct.name} has been updated.</p>`
     });
 
     if(!mailSent) {
       return res.status(500).json({
         status: 'error',
         data: null,
-        message: 'Error sending email.'
+        message: 'Error sending emails.'
       });
     }
 

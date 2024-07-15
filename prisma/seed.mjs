@@ -1,24 +1,15 @@
 import { PrismaClient } from '@prisma/client';
 
 
-
 const prisma = new PrismaClient();
 
 async function main() {
   // Create admin users
   const admin1 = await prisma.admin.create({
     data: {
-      email: 'admin1@example.com',
-      password: 'securepassword', // Remember to hash passwords in a real application
-      name: 'Admin One',
-    },
-  });
-
-  const admin2 = await prisma.admin.create({
-    data: {
-      email: 'admin2@example.com',
-      password: 'securepassword', // Remember to hash passwords in a real application
-      name: 'Admin Two',
+      email: 'jorge_alan_2001@hotmail.com',
+      name: 'jorge_alan_2001@hotmail.com"',
+      auth0Id: 'auth0|669062b5c7ae2e739059e185'
     },
   });
 

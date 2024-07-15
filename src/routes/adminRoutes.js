@@ -8,4 +8,10 @@ router.get('/', authMiddleware, adminController.getAllAdmins);
 
 router.post('/', authMiddleware, adminController.createAdmin); 
 
+router.get('/:id', authMiddleware, adminController.getAdminById);
+
+router.put('/:id', authMiddleware, adminController.updateAdmin);
+
+router.delete('/:id', authMiddleware, adminController.deleteAdmin);
+
 module.exports = router;

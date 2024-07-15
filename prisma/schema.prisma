@@ -8,6 +8,16 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model Admin {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  name      String
+  auth0Id   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
 model Product {
   id            Int      @id @default(autoincrement())
   sku           String   @unique
@@ -17,7 +27,6 @@ model Product {
   brand         String
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
-  adminId       String
   queryLogs     QueryLog[]
 }
 
