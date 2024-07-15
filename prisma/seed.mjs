@@ -30,7 +30,7 @@ async function main() {
         description: 'Description for Product Two', // Add description
         price: 20.99,
         brand: 'Brand B',
-        adminId: admin2.id,
+        adminId: admin1.id,
       },
       {
         sku: 'P003',
