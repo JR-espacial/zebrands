@@ -4,6 +4,6 @@ const logController = require('../controllers/queryLogController');
 
 const  authMiddleware = require('../middleware/authMiddleware');
 
-router.get('/', authMiddleware, logController.getAllLogs);
+router.get('/', authMiddleware(), logController.getAllLogs);
 module.exports = router;
 
