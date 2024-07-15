@@ -1,9 +1,5 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -12,17 +8,6 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
-
-model Admin {
-  id        Int      @id @default(autoincrement())
-  email     String   @unique
-  password  String
-  name      String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  products  Product[]
-}
-
 model Product {
   id            Int      @id @default(autoincrement())
   sku           String   @unique
@@ -32,8 +17,7 @@ model Product {
   brand         String
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
-  adminId       Int
-  admin         Admin    @relation(fields: [adminId], references: [id])
+  adminId       String
   queryLogs     QueryLog[]
 }
 
