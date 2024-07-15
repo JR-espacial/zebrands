@@ -97,8 +97,6 @@ describe('Admin Controller', () => {
 
             const response = await request(app).delete(`/admins/${adminId}`).send({}).set('Authorization', `Bearer ${token.body.data}`);
             expect(response.body.status).toBe('success');
-
-            console.log(response.body);
         });
     });
 
