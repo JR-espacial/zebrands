@@ -1,17 +1,45 @@
+// authMiddleware.js
 
+const dotenv = require("dotenv");
+const jwt = require('express-jwt');
+const jwksRsa = require('jwks-rsa');
 
-// Middleware function to check authentication status
-function authMiddleware(req, res, next) {
-    // Check if the user is authenticated
-    if (!req.oidc.isAuthenticated()) {
-        return res.status(401).json({
-            status: 'error',
-            data: null,
-            message: 'Unauthorized request go to /login'
+dotenv.config();
+
+const jwksUri = `https://${process.env.AUTH0_DOMAIN}/.well-known/jwks.json`;
+
+const authMiddleware = (requireAuth = true) => {
+  return (req, res, next) => {
+    jwt({
+      secret: jwksRsa.expressJwtSecret({
+        cache: true,
+        rateLimit: true,
+        jwksRequestsPerMinute: 5,
+        jwksUri: jwksUri
+      }),
+      audience: `${process.env.APP_AUDIENCE}`,
+      issuer: `https://${process.env.AUTH0_DOMAIN}/`,
+      algorithms: ['RS256']
+    })(req, res, (err) => {
+      if (err && requireAuth) {
+        
+        return res.status(401).send({
+          status: 'Unauthorized',
+          data: null,
+          message: 'Error: ' + 'Invalid bearer token'
         });
-    }
-    // If authenticated, proceed to the next middleware or route handler
-    next();
-}
+      }
+
+      if (err && !requireAuth) {
+        req.authenticated = false;
+        
+      } else {
+        req.authenticated = true;
+      }
+      
+      next();
+    });
+  };
+};
 
 module.exports = authMiddleware;

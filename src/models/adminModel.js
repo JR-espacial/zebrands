@@ -23,18 +23,18 @@ class Admin {
     });
   }
 
-  static async createAdmin(email, password, name) {
+  static async createAdmin(email,name, auth0Id) {
     // Create a new admin in the database using Prisma
     return await prisma.admin.create({
       data: {
         email,
-        password, // Remember to hash passwords in a real application
-        name
+        name,
+        auth0Id
       }
     });
   }
 
-  static async updateAdmin(adminId, email, password, name) {
+  static async updateAdmin(adminId, email, name, auth0Id) {
     // Update an existing admin in the database using Prisma
     return await prisma.admin.update({
       where: {
@@ -42,8 +42,8 @@ class Admin {
       },
       data: {
         email,
-        password,
-        name
+        name,
+        auth0Id
       }
     });
   }
