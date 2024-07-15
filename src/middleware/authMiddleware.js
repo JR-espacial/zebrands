@@ -23,7 +23,11 @@ const authMiddleware = (requireAuth = true) => {
     })(req, res, (err) => {
       if (err && requireAuth) {
         
-        return res.status(401).send('Unauthorized', err);
+        return res.status(401).send({
+          status: 'Unauthorized',
+          data: null,
+          message: 'Error: ' + 'Invalid bearer token'
+        });
       }
 
       if (err && !requireAuth) {

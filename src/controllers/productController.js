@@ -2,6 +2,7 @@ const productModel = require('../models/productModel');
 const mailerService = require('../services/mailService');
 const queryLogModel = require('../models/queryLogModel');
 
+
 // Fetch all products
 async function getAllProducts(req, res) {
   try {
@@ -38,7 +39,7 @@ async function getProduct(req, res) {
   const productId = parseInt(req.params.id);
 
   if (!productId) {
-    return res.status(400).json({
+    return res.status(400).send({
       status: 'error',
       data: null,
       message: 'Invalid product ID.'
@@ -48,17 +49,15 @@ async function getProduct(req, res) {
   try {
     const product = await productModel.getProductById(productId);
     if (!product) {
-      return res.status(404).json({
+      return res.status(404).send({
         status: 'error',
         data: null,
         message: 'Product not found.'
       });
     }
-
-    const  isAuthenticated = req.oidc.isAuthenticated()
-
-    console.log('isAuthenticated', isAuthenticated)
-
+    
+    //check request headers for authentication
+    const isAuthenticated = req.authenticated;
     if(!isAuthenticated) {
       const results = await queryLogModel.createQueryLog(productId);
 
@@ -71,13 +70,13 @@ async function getProduct(req, res) {
       }
     }
 
-    res.status(200).json({
+    res.status(200).send({
       status: 'success',
       data: product,
       message: 'Product retrieved successfully.'
     });
   } catch (error) {
-    res.status(400).json({
+    res.status(400).send({
       status: 'error',
       data: null,
       message: 'Error retrieving product: ' + error.message
@@ -133,7 +132,7 @@ async function updateProduct(req, res) {
   const productId = parseInt(req.params.id);
   
   if (!productId) {
-    return res.status(400).json({
+    return res.status(400).send({
       status: 'error',
       data: null,
       message: 'Invalid product ID.'
@@ -143,7 +142,7 @@ async function updateProduct(req, res) {
   const { name, description, price } = req.body;
 
   if (!name && !description && !price) {
-    return res.status(400).json({
+    return res.status(400).send({
       status: 'error',
       data: null,
       message: 'Missing required fields: name, description, price'
@@ -154,7 +153,7 @@ async function updateProduct(req, res) {
     const updatedProduct = await productModel.updateProduct(productId, name, description, price);
 
     if (!updatedProduct) {
-      return res.status(404).json({
+      return res.status(404).send({
         status: 'error',
         data: null,
         message: 'Product not found.'
@@ -168,7 +167,7 @@ async function updateProduct(req, res) {
     });
 
     if(!mailSent) {
-      return res.status(500).json({
+      return res.status(500).send({
         status: 'error',
         data: null,
         message: 'Error sending emails.'
@@ -176,13 +175,13 @@ async function updateProduct(req, res) {
     }
 
 
-    res.status(200).json({
+    res.status(200).send({
       status: 'success',
       data: updatedProduct,
       message: 'Product updated successfully.'
     });
   } catch (error) {
-    res.status(400).json({
+    res.status(400).send({
       status: 'error',
       data: null,
       message: 'Error updating product: ' + error.message
@@ -195,7 +194,7 @@ async function deleteProduct(req, res) {
   const productId = parseInt(req.params.id);
 
   if (!productId) {
-    return res.status(400).json({
+    return res.status(400).send({
       status: 'error',
       data: null,
       message: 'Invalid product ID.'
@@ -205,19 +204,19 @@ async function deleteProduct(req, res) {
   try {
     const deletedProduct = await productModel.deleteProduct(productId);
     if (!deletedProduct) {
-      return res.status(404).json({
+      return res.status(404).send({
         status: 'error',
         data: null,
         message: 'Product not found.'
       });
     }
-    res.status(200).json({
+    res.status(200).send({
       status: 'success',
       data: deletedProduct,
       message: 'Product deleted successfully.'
     });
   } catch (error) {
-    res.status(400).json({
+    res.status(400).send({
       status: 'error',
       data: null,
       message: 'Error deleting product: ' + error.message
