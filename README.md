@@ -20,7 +20,8 @@ Authorization: Bearer YOUR_ACCESS_TOKEN
 
 ## Base URL
 
-http://localhost:3000
+ Live Server: http://146.190.2.147:3000/
+ Local Server: http://localhost:3000
 
 ## Obtaining a Bearer Token
 
