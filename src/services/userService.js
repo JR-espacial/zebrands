@@ -17,12 +17,12 @@ class UserService {
     this.#userUrl = userUrl;
   }
 
-  async #getToken() {
+  async #getToken(audience) {
     const data = qs.stringify({
       'grant_type': 'client_credentials',
       'client_id': this.#clientId,
       'client_secret': this.#clientSecret,
-      'audience': this.#audience
+      'audience': audience || this.#audience
     });
 
     const config = {
@@ -67,6 +67,10 @@ class UserService {
     } catch (error) {
       throw new Error('Error creating user:' + error.response.data.message);
     }
+  }
+
+  async getApiToken(audience) {
+    return await this.#getToken(audience);
   }
 }
 
