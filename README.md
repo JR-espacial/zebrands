@@ -114,3 +114,69 @@ All query log endpoints require authorization using a bearer token. Include the 
 
 - GET /query-logs
   - Retrieves a list of all query logs.
+
+
+## Docker Installation
+
+To run the API using Docker, follow these steps:
+
+1. Make sure you have Docker installed on your system.
+
+2. Clone the repository:
+   ```
+   git clone https://github.com/JR-espacial/zebrands
+   ```
+
+3. Navigate to the project directory:
+   ```
+   cd zebrands
+   ```
+
+4. Create a `.env` file based on `.env.example` and configure necessary variables like database connection strings and Auth0 credentials.
+
+5. Start the Docker containers:
+   ```
+   docker-compose up -d
+   ```
+
+6. Access the Node.js container:
+   ```
+   docker exec -it <node-container-name> bash
+   ```
+
+7. Inside the container, run Prisma seed script:
+   ```
+   npm run prisma:seed
+   ```
+
+This will start the API containers defined in Docker Compose, initialize the database using Prisma seed script, and the API will be accessible at `http://localhost:3000`.
+
+
+## Local Installation
+
+To install and run the API locally, follow these steps:
+
+1. Clone the repository:
+   ```
+   git clone https://github.com/JR-espacial/zebrands
+   ```
+
+2. Navigate to the project directory:
+   ```
+   cd zebrands
+   ```
+
+3. Install dependencies:
+   ```
+   npm install
+   ```
+
+4. Set up environment variables:
+   - Create a `.env` file based on `.env.example` and configure necessary variables like database connection strings and Auth0 credentials.
+
+5. Start the server:
+   ```
+   npm start
+   ```
+
+The API will be available at `http://localhost:3000`.
